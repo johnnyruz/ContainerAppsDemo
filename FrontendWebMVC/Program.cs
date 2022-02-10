@@ -15,6 +15,10 @@ builder.Services.AddDaprClient(client =>
 });
 builder.Services.AddControllersWithViews().AddDapr();
 
+var appInsightsInstrumentationKey = Environment.GetEnvironmentVariable("AppInsightsInstrumentationKey");
+if (!string.IsNullOrEmpty(appInsightsInstrumentationKey))
+    builder.Services.AddApplicationInsightsTelemetry(appInsightsInstrumentationKey);
+
 // Add services to the container.
 var app = builder.Build();
 

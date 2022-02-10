@@ -1,4 +1,3 @@
-
 using System.Text.Json;
 
 var options = new JsonSerializerOptions()
@@ -15,6 +14,9 @@ builder.Services.AddDaprClient(client =>
     client.UseJsonSerializationOptions(options);
 });
 builder.Services.AddControllers().AddDapr();
+var appInsightsInstrumentationKey = Environment.GetEnvironmentVariable("AppInsightsInstrumentationKey");
+if (!string.IsNullOrEmpty(appInsightsInstrumentationKey))
+    builder.Services.AddApplicationInsightsTelemetry(appInsightsInstrumentationKey);
 
 var app = builder.Build();
 
