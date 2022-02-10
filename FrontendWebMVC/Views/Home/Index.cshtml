@@ -1,0 +1,89 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://azure.microsoft.com/en-us/services/container-apps/">Azure Container Apps with this demo</a>.</p>
+    
+    <div>
+        <button id="Publish1">Publish Single Message!</button>
+
+        <button id="Publish100">Publish 100 Messages!</button>
+    </div>
+
+    <div>
+        <p>Total Messages Published: <div id="totPub">0</div></p>
+    </div>
+
+    <div>
+        <p>Total Messages Processed: <div id="totProcess">0</div></p>
+    </div>
+
+</div>
+
+@section scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/signalrhub")
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+
+        async function start() {
+            try {
+                await connection.start();
+                console.log("SignalR Connected.");
+            } catch (err) {
+                console.log(err);
+                setTimeout(start, 5000);
+            }
+        };
+
+        connection.on("MessageProcessed", (messageCount) => {
+            var currentTotal = parseInt($('#totProcess').text());
+            currentTotal += parseInt(messageCount);
+            $('#totProcess').text(currentTotal);
+        });
+
+        connection.onclose(async () => {
+            await start();
+        });
+
+        // Start the connection.
+        start();
+    </script>
+
+    <script type="text/javascript">
+    $(document).ready(function(){
+
+        $('#Publish1').click(function () {
+
+            $.ajax({
+                url: "/Home/Publish",
+                type: "POST",
+                async: true,
+                success: function (response) {
+                    var currentTotal = parseInt($('#totPub').text());
+                    currentTotal += parseInt(response);
+                    $('#totPub').text(currentTotal);
+                }
+            });
+        });
+
+        $('#Publish100').click(function () {
+
+            $.ajax({
+                url: "/Home/Publish100",
+                type: "POST",
+                async: true,
+                success: function (response) {
+                    var currentTotal = parseInt($('#totPub').text());
+                    currentTotal += parseInt(response);
+                    $('#totPub').text(currentTotal);
+                }
+            });
+        });
+    });
+    </script>
+}

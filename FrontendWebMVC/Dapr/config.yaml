@@ -1,0 +1,12 @@
+﻿# Start with first line indented 2 spaces  
+  dapr:
+    enabled: true
+    appPort: 80
+    appId: "backendprocessing"
+    components:
+    - name: "azsb"
+      type: "pubsub.azure.servicebus"
+      version: "v1"
+      metadata:
+      - name: connectionString
+        value: ""

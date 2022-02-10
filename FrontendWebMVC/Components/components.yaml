@@ -1,0 +1,17 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: servicebus-pubsub
+  namespace: default
+spec:
+  type: pubsub.azure.servicebus
+  version: v1
+  metadata:
+  - name: connectionString # Required
+    value: "Endpoint=sb://containerappdemostd.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey={SharedAccessKey}"
+  - name: maxDeliveryCount
+    value: 1
+  - name: maxConcurrentHandlers
+    value: 1
+  - name: prefetchCount
+    value: 1
