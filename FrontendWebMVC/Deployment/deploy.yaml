@@ -1,0 +1,43 @@
+﻿type: Microsoft.Web/containerApps
+kubeEnvironmentId: KUBE_ENVIRONMENT_ID
+configuration:
+  activeRevisionsMode: multiple
+  secrets:
+  - name: servicebus-connection-string
+    value: SERVICE_BUS_CONNECTION_STRING
+  - name: appinsightsinstrumentationkey
+    value: APP_INSIGHTS_KEY 
+  ingress:
+    external: true
+    targetPort: 80
+  
+template:
+  containers:
+  - image: jruzia/containerappdemo-frontend:latest
+    name: containerappdemo-frontend
+    resources:
+      cpu: 0.5
+      memory: 1Gi
+    env:
+      - name: AppInsightsInstrumentationKey
+        secretRef: "appinsightsinstrumentationkey"
+  scale:
+    maxReplicas: 1
+    minReplicas: 0
+  dapr:
+    enabled: true
+    appPort: 80
+    appId: containerappdemo-frontend
+    components:
+    - name: servicebus-pubsub-frontend
+      type: pubsub.azure.servicebus
+      version: "v1"
+      metadata:
+      - name: connectionString # Required
+        secretRef: "servicebus-connection-string"
+      - name: maxDeliveryCount
+        value: 1
+      - name: maxConcurrentHandlers
+        value: 1
+      - name: prefetchCount
+        value: 1

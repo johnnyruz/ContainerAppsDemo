@@ -43,7 +43,7 @@ namespace FrontendWebMVC.Controllers
             return Ok(msg == null ? 0 : i);
         }
 
-        [Topic("servicebus-pubsub", "messageresponsetopic")]
+        [Topic("servicebus-pubsub-frontend", "messageresponsetopic")]
         [HttpPost("/messageprocessed")]
         public async Task<ActionResult> MessageProcessed([FromBody] DaprMessage daprMessage)
         {
@@ -67,7 +67,7 @@ namespace FrontendWebMVC.Controllers
 
             try
             {
-                await _dapr.PublishEventAsync<DaprMessage>("servicebus-pubsub", "messagepublishtopic", msg);
+                await _dapr.PublishEventAsync<DaprMessage>("servicebus-pubsub-frontend", "messagepublishtopic", msg);
                 return msg;
             }
             catch(Exception e)

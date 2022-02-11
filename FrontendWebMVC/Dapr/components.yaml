@@ -8,7 +8,7 @@ spec:
   version: v1
   metadata:
   - name: connectionString # Required
-    value: "Endpoint=sb://containerappdemostd.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey={SharedAccessKey}"
+    value: "Endpoint=sb://containerappdemostd.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=EZJge6BXYBlcoc3K8g9q7RxMMU/hlesirX3GTmZusyQ="
   - name: maxDeliveryCount
     value: 1
   - name: maxConcurrentHandlers

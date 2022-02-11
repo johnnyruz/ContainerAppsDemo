@@ -1,0 +1,52 @@
+﻿type: Microsoft.Web/containerApps
+kubeEnvironmentId: KUBE_ENVIRONMENT_ID
+configuration:
+  activeRevisionsMode: multiple
+  secrets:
+  - name: servicebus-connection-string
+    value: SERVICE_BUS_CONNECTION_STRING
+  - name: appinsightsinstrumentationkey
+    value: APP_INSIGHTS_KEY 
+#  ingress:
+#    internal: true
+#    targetPort: 80
+  
+template:
+  containers:
+  - image: jruzia/containerappdemo-backend:latest
+    name: containerappdemo-backend
+    resources:
+      cpu: 0.5
+      memory: 1Gi
+    env:
+      - name: AppInsightsInstrumentationKey
+        secretRef: "appinsightsinstrumentationkey"
+  dapr:
+    enabled: true
+    appPort: 80
+    appId: containerappdemo-backend
+    components:
+    - name: servicebus-pubsub-backend
+      type: pubsub.azure.servicebus
+      version: v1
+      metadata:
+      - name: connectionString # Required
+        secretRef: "servicebus-connection-string"
+      - name: maxConcurrentHandlers
+        value: 1
+      - name: prefetchCount
+        value: 1
+  scale:
+    maxReplicas: 10
+    minReplicas: 0
+    rules:
+    - name: service-bus-scaling-rule
+      custom:
+        auth:
+        - secretRef: servicebus-connection-string
+          triggerParameter: connection
+        metadata:
+          queueLength: '5'
+          topicName: 'messagepublishtopic'
+          subscriptionName: containerappdemo-backend
+        type: azure-servicebus
