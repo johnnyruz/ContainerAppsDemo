@@ -17,13 +17,13 @@ namespace BackendProcessor.Controllers
             _dapr = dapr;
         }
 
-        [Topic("servicebus-pubsub-backend", "messagepublishtopic")]
+        [Topic("servicebus-pubsub", "messagepublishtopic")]
         [HttpPost("/processmessage")]
         public async Task<ActionResult> ProcessMessage([FromBody] DaprMessage daprMessage)
         {
             _logger.LogInformation($"Received Message Bus Info! {daprMessage.MessageId}");
             await Task.Delay(1000);
-            await _dapr.PublishEventAsync<DaprMessage>("servicebus-pubsub-backend", "messageresponsetopic", daprMessage);
+            await _dapr.PublishEventAsync<DaprMessage>("servicebus-pubsub", "messageresponsetopic", daprMessage);
             return Ok();
         }
 
