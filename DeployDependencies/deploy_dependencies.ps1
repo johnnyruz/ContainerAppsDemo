@@ -1,6 +1,6 @@
 $RESOURCE_GROUP_NAME = Read-Host -Prompt "Enter your Resource Group Name"
 $RESOURCE_PREFIX = Read-Host -Prompt "Enter a resource prefix"
-$LOCATION = "CanadaCentral"
+$LOCATION = Read-Host -Prompt "Enter Location"
 $LOG_ANALYTICS_NAME = "${RESOURCE_PREFIX}-analytics"
 $APP_INSIGHTS_NAME = "${RESOURCE_PREFIX}-app-insights"
 $APP_ENV_NAME = "${RESOURCE_PREFIX}-appenv"
