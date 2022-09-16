@@ -4,7 +4,7 @@ param logAnalyticsClientId string
 param logAnalyticsSecretKey string
 param aiInstrumentationKey string
 
-resource environment 'Microsoft.App/managedEnvironments@2022-01-01-preview' = {
+resource environment 'Microsoft.App/managedEnvironments@2022-03-01' = {
   name: environmentName
   location: location
   properties: {
@@ -16,10 +16,20 @@ resource environment 'Microsoft.App/managedEnvironments@2022-01-01-preview' = {
       }
     }
     daprAIInstrumentationKey: aiInstrumentationKey
+    daprAIConnectionString: 'string'
+//    vnetConfiguration: {
+//      dockerBridgeCidr: 'string'
+//      infrastructureSubnetId: 'string'
+//      internal: bool
+//      platformReservedCidr: 'string'
+//      platformReservedDnsIP: 'string'
+//      runtimeSubnetId: 'string'
+//    }
+    zoneRedundant: false
   }
 }
 
-resource environmentDaprConfig 'Microsoft.App/managedEnvironments/daprComponents@2022-01-01-preview' = {
+resource environmentDaprConfig 'Microsoft.App/managedEnvironments/daprComponents@2022-03-01' = {
   name: 'servicebus-pubsub'
   parent: environment
   properties: {
